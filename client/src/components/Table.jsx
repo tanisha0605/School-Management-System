@@ -9,48 +9,58 @@ function Table({ modelName }) {
     fetchData();
   }, []);
 
+  const selectedFieldsMap = {
+    student: ['name', 'gender', 'dob', 'contactDetails.email', 'feesPaid', 'class.name'],
+    teacher: ['contactDetails.email', 'name', 'gender', 'dob', 'salary', 'assignedClass'],
+    class:['name','year','teacher.name','maxCapacity']
+  };
+  
   const fetchData = async () => {
     try {
-      const lowerCaseModelName=modelName.toLowerCase();
-      // Define selected fields for each modelName
-      const selectedFields = {
-        student: ['name', 'gender', 'dob', 'contactDetails.email', 'feesPaid', 'class.name'],
-        teacher: ['contactDetails.email', 'name', 'gender', 'dob', 'salary', 'assignedClass.name'],
-        class: ['name', 'year', 'teacher', 'maxCapacity']
-      };
-
+      // Convert modelName to lowercase
+      const lowerCaseModelName = modelName.toLowerCase();
+  
       // Make the API call to fetch data for the modelName
-      const response = await fetch(`/api/${lowerCaseModelName}/get`);
+      const response = await fetch(`/api/${lowerCaseModelName}/get`); 
       const data = await response.json();
-
-      // Extracting only the required fields based on the modelName
+  
+      // Extracting only the required fields from the data
       const rowsWithSelectedFields = data.map((row, index) => {
-        const selectedRow = { id: index + 1 }; // Generate a unique ID for each row
-        selectedFields[lowerCaseModelName].forEach(field => {
-          const fieldNames = field.split('.');
+        const selectedFields = selectedFieldsMap[lowerCaseModelName];
+        const selectedValues = selectedFields.reduce((acc, key) => {
+          const keys = key.split('.');
           let value = row;
-          fieldNames.forEach(fieldName => {
-            value = value && value[fieldName];
-          });
-          selectedRow[fieldNames[fieldNames.length - 1]] = value;
-        });
-        return selectedRow;
+          for (let i = 0; i < keys.length; i++) {
+            value = value[keys[i]];
+            if (value === undefined) {
+              break;
+            }
+          }
+          if (value !== undefined) {
+            acc[key] = value;
+          }
+          return acc;
+        }, {});
+        return {
+          id: index + 1, // Generate a unique ID for each row
+          ...selectedValues
+        };
       });
-
+  
       // Extract column names from the first row of data
       const firstRow = rowsWithSelectedFields[0];
       const columnNames = Object.keys(firstRow);
-
+  
       // Create column definition for DataGrid
       const gridColumns = columnNames.map((columnName) => ({
         field: columnName,
         headerName: columnName.charAt(0).toUpperCase() + columnName.slice(1),
         width: 150,
       }));
-
+  
       setRows(rowsWithSelectedFields);
       setColumns(gridColumns);
-
+  
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -74,6 +84,7 @@ function Table({ modelName }) {
 }
 
 export default Table;
+
 
 
 
