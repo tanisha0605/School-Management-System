@@ -34,8 +34,8 @@ const classSchema = new mongoose.Schema({
 // Middleware to update numMaleStudents and numFemaleStudents fields
 classSchema.pre('save', async function(next) {
   try {
-    const numMaleStudents = await this.model('Student').countDocuments({ class: this._id, gender: 'male' });
-    const numFemaleStudents = await this.model('Student').countDocuments({ class: this._id, gender: 'female' });
+    const numMaleStudents = await this.model('Student').countDocuments({ class: this._id, gender: 'Male' });
+    const numFemaleStudents = await this.model('Student').countDocuments({ class: this._id, gender: 'Female' });
     this.numMaleStudents = numMaleStudents;
     this.numFemaleStudents = numFemaleStudents;
     next();

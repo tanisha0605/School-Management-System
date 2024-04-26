@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-
+import { Link } from "react-router-dom";
 function Table({ modelName }) {
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -11,7 +11,7 @@ function Table({ modelName }) {
 
   const selectedFieldsMap = {
     student: ['name', 'gender', 'dob', 'contactDetails.email', 'feesPaid', 'class.name'],
-    teacher: ['contactDetails.email', 'name', 'gender', 'dob', 'salary', 'assignedClass'],
+    teacher: ['contactDetails.email', 'name', 'gender', 'dob', 'salary', 'assignedClass.name'],
     class:['name','year','teacher.name','maxCapacity']
   };
   
@@ -37,6 +37,9 @@ function Table({ modelName }) {
             }
           }
           if (value !== undefined) {
+            if (key === 'dob') {
+              value = value.slice(0, 10); // Extract YYYY-MM-DD part
+            }
             acc[key] = value;
           }
           return acc;
@@ -52,11 +55,25 @@ function Table({ modelName }) {
       const columnNames = Object.keys(firstRow);
   
       // Create column definition for DataGrid
-      const gridColumns = columnNames.map((columnName) => ({
-        field: columnName,
-        headerName: columnName.charAt(0).toUpperCase() + columnName.slice(1),
-        width: 150,
-      }));
+      const gridColumns = columnNames.map((columnName) => {
+        // Modify column configuration for 'name' column when modelName is 'Class'
+        if (modelName === 'Class' && columnName === 'name') {
+          return {
+            field: columnName,
+            headerName: getHeaderTitle(columnName),
+            width: 150,
+            renderCell: (params) => (
+              // Render a Link to navigate to a new page
+              <Link to={`/class-analytics`}>{params.value}</Link>
+            ),
+          };
+        }
+        return {
+          field: columnName,
+          headerName: getHeaderTitle(columnName), // Get customized header title
+          width: 150,
+        };
+      });
   
       setRows(rowsWithSelectedFields);
       setColumns(gridColumns);
@@ -65,6 +82,31 @@ function Table({ modelName }) {
       console.error("Error fetching data:", error);
     }
   };
+  
+  // Function to get customized header title
+  const getHeaderTitle = (columnName) => {
+    switch (columnName) {
+      case 'dob':
+        return 'Date of Birth';
+      case 'assignedClass.name':
+        return 'Assigned Class';
+      case 'contactDetails.email':
+        return 'Email';
+      case 'maxCapacity':
+        return 'Max Capacity';
+      case 'teacher.name' :
+        return 'Assigned Teacher';
+      case 'class.name':
+        return 'Class Name'
+      case 'feesPaid':
+        return 'Fees Paid';
+      case 'id':
+        return 'ID';
+      default:
+        return columnName.charAt(0).toUpperCase() + columnName.slice(1);
+    }
+  };
+  
 
   return (
     <div style={{ height: 500, width: "100%" }}>
@@ -72,12 +114,18 @@ function Table({ modelName }) {
         sx={{
           m: 7,
           boxShadow: 1,
+          fontSize: 14,
+          columnGap:10,
+          rowGap: 3,
         }}
-        disableRowSelectionOnClick
         rows={rows}
         columns={columns}
-        pageSize={5}
-        pageSizeOptions={[5, 10, 25]}
+        initialState={{
+          pagination: {
+            paginationModel: { pageSize: 5, page: 0 },
+          },
+        }}
+        pageSizeOptions={[5,10,25]}
       />
     </div>
   );

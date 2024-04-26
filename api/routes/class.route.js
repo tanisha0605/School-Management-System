@@ -8,5 +8,6 @@ router.post('/update/:id',verifyToken,updateClass);
 router.delete('/delete/:id',verifyToken,deleteClass);
 router.get('/get',verifyToken,getClasses);
 router.get('/get/:id',verifyToken,getClass);
+router.get('/getIdByName/:name',verifyToken,getClasses);
 
 export default router;
