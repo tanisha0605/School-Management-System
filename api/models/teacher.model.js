@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const studentSchema = new mongoose.Schema({
+const teacherSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -22,26 +22,20 @@ const studentSchema = new mongoose.Schema({
     phone: String,
     address: String
   },
-  feesPaid: {
+  salary: {
     type: Number,
     required: true
   },
-  class: {
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Class'
-    },
-    name: {
-      type: String
-    }
+  assignedClass: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Class'
   },
   role: {
     type: String,
-    default: "Student"
-},
-},{ timestamps: true });
+    default: "Teacher"
+    },
+});
 
-const Student = mongoose.model('Student', studentSchema);
+const Teacher = mongoose.model('Teacher', teacherSchema);
 
-export default Student;
-
+export default Teacher;

@@ -11,11 +11,11 @@ export default function Home() {
         <Lottie className='h-3/4 w-full' animationData={Animation} />
       </div>
       <div className='w-1/2 text-center flex flex-col items-center ml-auto mt-10'>
-        <h1 className='lora-font text-4xl text-mblue mt-20'>
-          Welcome to <span className='text-dblue'>Edu</span>Track
+        <h1 className='lora-font text-6xl text-mblue mt-20'>
+          Welcome to <span className='text-dblue'>Edu</span>Track!
         </h1>
-        <h3 className='sedan-regular text-3xl'>
-          Your School's Ultimate Management Solution!
+        <h3 className='sedan-regular text-2xl'>
+          Your School's Ultimate Management Solution.
         </h3>
         <h5 className='text-xl mt-7 sedan-regular text-grey'>
           EduTrack revolutionizes school management using comprehensive tools
@@ -26,7 +26,7 @@ export default function Home() {
           time.
         </h5>
         {currentUser ? (
-        <p className='mt-10 text-lg sedan-regular'> Welcome <Link to='/profile'><span  className='cursor-pointer underline text-yellow'>{currentUser.username}</span></Link>, How can we help you today?</p>
+        <p className='mt-10 text-lg sedan-regular'> Welcome <Link to='/profile'><span  className='cursor-pointer underline text-dblue'>{currentUser.username}</span></Link>, How can we help you today?</p>
         ) : (
         <h6 className='text-xl mt-5 sedan-regular'>
           Sign up for EduTrack now and experience the difference firsthand...
