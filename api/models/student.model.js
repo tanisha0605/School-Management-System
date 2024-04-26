@@ -27,13 +27,8 @@ const studentSchema = new mongoose.Schema({
     required: true
   },
   class: {
-    id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Class'
-    },
-    name: {
-      type: String
-    }
   },
   role: {
     type: String,

@@ -69,7 +69,7 @@ export const updateTeacher = async (req, res, next) => {
 
 export const getTeacher = async (req, res, next) => {
   try {
-    const Teacher = await Teacher.findById(req.params.id);
+    const Teacher = await Teacher.findById(req.params.id).populate('assignedClass');
     if (!Teacher) {
       return next(errorHandler(404, 'Teacher not found!'));
     }

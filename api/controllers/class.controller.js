@@ -42,7 +42,7 @@ export const updateClass = async (req, res, next) => {
 
 export const getClass = async (req, res, next) => {
   try {
-    const Class = await Class.findById(req.params.id);
+    const Class = await Class.findById(req.params.id).populate('students').populate('teacher');
     if (!Class) {
       return next(errorHandler(404, 'Class not found!'));
     }
@@ -54,7 +54,7 @@ export const getClass = async (req, res, next) => {
 
 export const getClasses = async (req, res, next) => {
   try {
-    const Classes = await Class.find()
+    const Classes = await Class.find().populate('students').populate('teacher');
     return res.status(200).json(Classes);
   } catch (error) {
     next(error);

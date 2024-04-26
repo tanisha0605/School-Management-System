@@ -6,18 +6,22 @@ export const createStudent = async (req, res, next) => {
   try {
     const className = req.body.class;
 
+    // Find the class by name
     const foundClass = await Class.findOne({ name: className });
-    console.log(foundClass);
+
+    // If class not found, return error
     if (!foundClass) {
       return res.status(404).json({ message: 'Class not found' });
     }
+
+    // Create the student with the class association
     const newStudent = await Student.create({
       ...req.body,
-      class: foundClass._id
+      class: foundClass._id // Assign class ID to the student
     });
 
     // Update the class with the newly created Student
-    foundClass.students = newStudent._id;
+    foundClass.students.push(newStudent._id);
     await foundClass.save();
 
     res.status(201).json(newStudent);
@@ -86,7 +90,7 @@ export const getStudent = async (req, res, next) => {
 
 export const getStudents = async (req, res, next) => {
   try {
-    const students = await Student.find()
+    const students = await Student.find().populate("class")
     return res.status(200).json(students);
   } catch (error) {
     next(error);
