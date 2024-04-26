@@ -64,7 +64,7 @@ function Table({ modelName }) {
             width: 150,
             renderCell: (params) => (
               // Render a Link to navigate to a new page
-              <Link to={`/class-analytics`}>{params.value}</Link>
+              <Link to={`/class-analytics/${params.row.name}`}>{params.value}</Link>
             ),
           };
         }
