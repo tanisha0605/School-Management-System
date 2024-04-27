@@ -30,11 +30,11 @@ function Table({ modelName }) {
     try {
       // Convert modelName to lowercase
       const lowerCaseModelName = modelName.toLowerCase();
-
+  
       // Make the API call to fetch data for the modelName
       const response = await fetch(`/api/${lowerCaseModelName}/get`); 
       const data = await response.json();
-      //console.log(data);
+      
       // Extracting only the required fields from the data
       const rowsWithSelectedFields = data.map((row, index) => {
         const selectedFields = selectedFieldsMap[lowerCaseModelName];
@@ -43,7 +43,8 @@ function Table({ modelName }) {
           let value = row;
           for (let i = 0; i < keys.length; i++) {
             value = value[keys[i]];
-            if (value === undefined) {
+            if (value === undefined || value === null) {
+              value = ''; // Assign empty string if value is undefined or null
               break;
             }
           }
@@ -60,11 +61,11 @@ function Table({ modelName }) {
           ...selectedValues
         };
       });
-
+  
       // Extract column names from the first row of data
       const firstRow = rowsWithSelectedFields[0];
       const columnNames = Object.keys(firstRow);
-
+  
       // Create column definition for DataGrid
       const gridColumns = columnNames.map((columnName) => {
         if (modelName === 'Class' && columnName === 'name') {
@@ -85,7 +86,7 @@ function Table({ modelName }) {
           width: 150,
         };
       });
-
+  
       // Add a new column definition for the delete button
       gridColumns.push({
         field: 'delete',
@@ -96,16 +97,16 @@ function Table({ modelName }) {
         ),
       });
       
-      
       const visibleColumns = gridColumns.filter(column => column.field !== '_id');
-
+  
       setRows(rowsWithSelectedFields);
       setColumns(visibleColumns);
-
+  
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+  
 
   // Function to get customized header title
   const getHeaderTitle = (columnName) => {

@@ -4,6 +4,7 @@ const classSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique:true
   },
   year: {
     type: Number,
@@ -12,6 +13,10 @@ const classSchema = new mongoose.Schema({
   teacher: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Teacher'
+  },
+  currentCapacity: {
+    type: Number, 
+    default: 0 
   },
   maxCapacity: {
     type: Number,

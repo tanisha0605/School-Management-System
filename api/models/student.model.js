@@ -17,7 +17,8 @@ const studentSchema = new mongoose.Schema({
   contactDetails: {
     email: {
       type: String,
-      required: true
+      required: true,
+      unique:true
     },
     phone: String,
     address: String

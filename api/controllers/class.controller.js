@@ -1,6 +1,6 @@
 import Class from '../models/class.model.js';
 import { errorHandler } from '../utils/error.js';
-
+import Student from '../models/student.model.js';
 export const createClass = async (req, res, next) => {
   try {
     const newClass = await Class.create(req.body);
@@ -17,12 +17,25 @@ export const deleteClass = async (req, res, next) => {
     return next(errorHandler(404, 'Class not found!'));
   }
   try {
+    // Find all students associated with the class
+    const studentsToUpdate = await Student.find({ class: req.params.id });
+
+    // Update class field for each student to null
+    await Promise.all(studentsToUpdate.map(async (student) => {
+      student.class = null; 
+      await student.save();
+    }));
+
+    // Delete the class
     await Class.findByIdAndDelete(req.params.id);
+    
     res.status(200).json('Class has been deleted!');
   } catch (error) {
     next(error);
   }
 };
+
+
 
 export const updateClass = async (req, res, next) => {
   const Class= await Class.findById(req.params.id);

@@ -13,14 +13,20 @@ export const createStudent = async (req, res, next) => {
       return res.status(404).json({ message: 'Class not found' });
     }
 
+    // Check if adding the student will exceed the max capacity
+    if (foundClass.currentCapacity >= foundClass.maxCapacity) {
+      return res.status(400).json({ message: 'Class is full. Cannot add more students.' });
+    }
+
     // Create the student with the class association
     const newStudent = await Student.create({
       ...req.body,
       class: foundClass._id // Assign class ID to the student
     });
 
-    // Update the class with the newly created Student
+    // Update the class with the newly created Student and increase currentCapacity
     foundClass.students.push(newStudent._id);
+    foundClass.currentCapacity++;
     await foundClass.save();
 
     res.status(201).json(newStudent);
