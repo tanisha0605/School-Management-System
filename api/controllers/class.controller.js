@@ -11,9 +11,9 @@ export const createClass = async (req, res, next) => {
 };
 
 export const deleteClass = async (req, res, next) => {
-  const Class = await Class.findById(req.params.id);
+  const classData = await Class.findById(req.params.id);
 
-  if (!Class) {
+  if (!classData) {
     return next(errorHandler(404, 'Class not found!'));
   }
   try {
@@ -43,11 +43,11 @@ export const updateClass = async (req, res, next) => {
 
 export const getClass = async (req, res, next) => {
   try {
-    const Class = await Class.findById(req.params.id).populate('students').populate('teacher');
-    if (!Class) {
+    const classData = await Class.findById(req.params.id).populate('students').populate('teacher');
+    if (!classData) {
       return next(errorHandler(404, 'Class not found!'));
     }
-    res.status(200).json(Class);
+    res.status(200).json(classData);
   } catch (error) {
     next(error);
   }

@@ -11,11 +11,21 @@ function Table({ modelName }) {
   }, []);
 
   const selectedFieldsMap = {
-    student: ['name', 'gender', 'dob', 'contactDetails.email', 'feesPaid', 'class.name'],
-    teacher: ['contactDetails.email', 'name', 'gender', 'dob', 'salary', 'assignedClass.name'],
-    class:['name','year','teacher.name','maxCapacity']
+    student: ['name', 'gender', 'dob', 'contactDetails.email', 'feesPaid', 'class.name','_id'],
+    teacher: ['contactDetails.email', 'name', 'gender', 'dob', 'salary', 'assignedClass.name','_id'],
+    class:['name','year','teacher.name','maxCapacity','_id']
   };
-
+  const handleDelete =async(lowerCaseModelName,id)=>{
+    try {
+      const response = await fetch(`/api/${lowerCaseModelName}/delete/${id}`,{
+        method:'DELETE',
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+  }
   const fetchData = async () => {
     try {
       // Convert modelName to lowercase
@@ -24,7 +34,7 @@ function Table({ modelName }) {
       // Make the API call to fetch data for the modelName
       const response = await fetch(`/api/${lowerCaseModelName}/get`); 
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       // Extracting only the required fields from the data
       const rowsWithSelectedFields = data.map((row, index) => {
         const selectedFields = selectedFieldsMap[lowerCaseModelName];
@@ -82,13 +92,15 @@ function Table({ modelName }) {
         headerName: 'Actions',
         width: 150,
         renderCell: (params) => (
-          <DeleteButton onClick={() => {}} /> 
+          <DeleteButton onClick={() => handleDelete(lowerCaseModelName,params.row._id)} /> 
         ),
       });
       
       
+      const visibleColumns = gridColumns.filter(column => column.field !== '_id');
+
       setRows(rowsWithSelectedFields);
-      setColumns(gridColumns);
+      setColumns(visibleColumns);
 
     } catch (error) {
       console.error("Error fetching data:", error);
