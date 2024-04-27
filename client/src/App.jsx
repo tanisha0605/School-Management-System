@@ -9,6 +9,7 @@ import Student from "./pages/Student"
 import Teacher from "./pages/Teacher"
 import Class from "./pages/Class"
 import ClassAnalytics from "./pages/ClassAnalytics"
+
 export default function App() {
   return (
     <BrowserRouter>

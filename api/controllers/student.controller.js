@@ -1,7 +1,6 @@
 import Student from '../models/student.model.js';
 import Class from '../models/class.model.js';
 import { errorHandler } from '../utils/error.js';
-
 export const createStudent = async (req, res, next) => {
   try {
     const className = req.body.class;
@@ -96,3 +95,16 @@ export const getStudents = async (req, res, next) => {
     next(error);
   }
 };
+export const getIdByName = async (req, res, next) => {
+  try {
+    const studentName = req.params.name;
+    const studentData = await Student.findOne({ name: studentName });
+    if (!studentData) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    res.status(200).json( studentData._id );
+  } catch (error) {
+    next(error);
+  }
+};
+

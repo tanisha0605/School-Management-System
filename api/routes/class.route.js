@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteClass,updateClass,getClass,getClasses,createClass, getClassByName} from '../controllers/class.controller.js';
+import { deleteClass,updateClass,getClass,getClasses,createClass, getClassByName,getIdByName} from '../controllers/class.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
 const router = express.Router();
 
@@ -9,5 +9,6 @@ router.delete('/delete/:id',verifyToken,deleteClass);
 router.get('/get',verifyToken,getClasses);
 router.get('/get/:id',verifyToken,getClass);
 router.get('/getByName/:name',verifyToken,getClassByName);
+router.get('/getIdByName/:name',verifyToken,getIdByName);
 
 export default router;

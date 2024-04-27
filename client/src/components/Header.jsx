@@ -33,6 +33,7 @@ export default function Header() {
                             <Link to='/class'>
                             <li className='px-4 py-2 hover:bg-lblue hover:underline cursor-pointer'>Classes</li>
                             </Link>
+                           
                         </ul>
                     )}
                 </li>

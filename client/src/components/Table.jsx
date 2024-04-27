@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
+import DeleteButton from "./DeleteButton";
 function Table({ modelName }) {
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -14,25 +15,22 @@ function Table({ modelName }) {
     teacher: ['contactDetails.email', 'name', 'gender', 'dob', 'salary', 'assignedClass.name'],
     class:['name','year','teacher.name','maxCapacity']
   };
-  
+
   const fetchData = async () => {
     try {
       // Convert modelName to lowercase
       const lowerCaseModelName = modelName.toLowerCase();
-  
+
       // Make the API call to fetch data for the modelName
       const response = await fetch(`/api/${lowerCaseModelName}/get`); 
       const data = await response.json();
-  
+      console.log(data);
       // Extracting only the required fields from the data
       const rowsWithSelectedFields = data.map((row, index) => {
-        //console.log(row);
         const selectedFields = selectedFieldsMap[lowerCaseModelName];
         const selectedValues = selectedFields.reduce((acc, key) => {
           const keys = key.split('.');
-          //console.log(keys);
           let value = row;
-          //console.log(value);
           for (let i = 0; i < keys.length; i++) {
             value = value[keys[i]];
             if (value === undefined) {
@@ -52,22 +50,22 @@ function Table({ modelName }) {
           ...selectedValues
         };
       });
-  
+
       // Extract column names from the first row of data
       const firstRow = rowsWithSelectedFields[0];
       const columnNames = Object.keys(firstRow);
-  
+
       // Create column definition for DataGrid
       const gridColumns = columnNames.map((columnName) => {
-        // Modify column configuration for 'name' column when modelName is 'Class'
         if (modelName === 'Class' && columnName === 'name') {
           return {
             field: columnName,
             headerName: getHeaderTitle(columnName),
             width: 150,
             renderCell: (params) => (
-              // Render a Link to navigate to a new page
-              <Link to={`/class-analytics/${params.row.name}`}>{params.value}</Link>
+              <div>
+                <Link to={`/class-analytics/${params.row.name}`}>{params.value}</Link>
+              </div>
             ),
           };
         }
@@ -77,15 +75,26 @@ function Table({ modelName }) {
           width: 150,
         };
       });
-  
+
+      // Add a new column definition for the delete button
+      gridColumns.push({
+        field: 'delete',
+        headerName: 'Actions',
+        width: 150,
+        renderCell: (params) => (
+          <DeleteButton onClick={() => {}} /> 
+        ),
+      });
+      
+      
       setRows(rowsWithSelectedFields);
       setColumns(gridColumns);
-  
+
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   // Function to get customized header title
   const getHeaderTitle = (columnName) => {
     switch (columnName) {
@@ -109,7 +118,6 @@ function Table({ modelName }) {
         return columnName.charAt(0).toUpperCase() + columnName.slice(1);
     }
   };
-  
 
   return (
     <div style={{ height: 500, width: "100%" }}>
@@ -135,6 +143,8 @@ function Table({ modelName }) {
 }
 
 export default Table;
+
+
 
 
 

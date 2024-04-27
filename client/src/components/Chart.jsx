@@ -3,9 +3,9 @@ import { createRoot } from "react-dom/client";
 import { AgChartsReact } from "ag-charts-react";
 
 export const ChartExample = (data) => {
-    console.log(data);
-    console.log(data.data.numMaleStudents);
-    console.log(data.data.numFemaleStudents);
+    // console.log(data);
+    // console.log(data.data.numMaleStudents);
+    // console.log(data.data.numFemaleStudents);
   const [options, setOptions] = useState({
     data: [
         { asset: "Male", amount: data.data.numMaleStudents },

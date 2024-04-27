@@ -87,3 +87,18 @@ export const getTeachers = async (req, res, next) => {
     next(error);
   }
 };
+export const getIdByName = async (req, res, next) => {
+  try {
+    const teacherName = req.params.name;
+    const teacherData = await Teacher.findOne({ name: teacherName });
+
+    if (!teacherData) {
+      return res.status(404).json({ message: 'Teacher not found' });
+    }
+
+    res.status(200).json(teacherData._id); // Return the ID directly
+  } catch (error) {
+    next(error);
+  }
+};
+
