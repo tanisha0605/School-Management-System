@@ -52,10 +52,10 @@ export const getClass = async (req, res, next) => {
   }
 };
 
-export const getClassIdByName = async (req, res, next) => {
+export const getClassByName = async (req, res, next) => {
   try {
     const className = req.params.name;
-    const classData = await Class.findOne({ name: className });
+    const classData = await Class.findOne({ name: className }).populate('students').populate('teacher');
     if (!classData) {
       return res.status(404).json({ message: 'Class not found' });
     }

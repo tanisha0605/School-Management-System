@@ -8,6 +8,7 @@ import PrivateRoute from "./components/PrivateRoute"
 import Student from "./pages/Student"
 import Teacher from "./pages/Teacher"
 import Class from "./pages/Class"
+import ClassAnalytics from "./pages/ClassAnalytics"
 export default function App() {
   return (
     <BrowserRouter>
@@ -16,11 +17,12 @@ export default function App() {
       <Route path="/" element={<Home/>}/>
       <Route path="/sign-in" element={<SignIn/>}/>
       <Route path="/sign-up" element={<SignUp/>}/>
-      <Route path="/class" element={<Class/>}/>
-      <Route path="/teacher" element={<Teacher/>}/>
-      <Route path="/student" element={<Student/>}/>
       <Route  element={<PrivateRoute/>}>
           <Route path="/profile" element={<Profile/>}/>
+          <Route path="/class" element={<Class/>}/>
+          <Route path="/teacher" element={<Teacher/>}/>
+          <Route path="/student" element={<Student/>}/>
+          <Route path="/class-analytics/:name" element={<ClassAnalytics/>}/>
       </Route>
     </Routes>
     </BrowserRouter>

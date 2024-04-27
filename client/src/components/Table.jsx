@@ -26,10 +26,13 @@ function Table({ modelName }) {
   
       // Extracting only the required fields from the data
       const rowsWithSelectedFields = data.map((row, index) => {
+        //console.log(row);
         const selectedFields = selectedFieldsMap[lowerCaseModelName];
         const selectedValues = selectedFields.reduce((acc, key) => {
           const keys = key.split('.');
+          //console.log(keys);
           let value = row;
+          //console.log(value);
           for (let i = 0; i < keys.length; i++) {
             value = value[keys[i]];
             if (value === undefined) {
@@ -132,6 +135,13 @@ function Table({ modelName }) {
 }
 
 export default Table;
+
+
+
+
+
+
+
 
 
 

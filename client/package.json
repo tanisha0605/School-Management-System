@@ -16,6 +16,7 @@
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
     "@mui/x-data-grid": "^7.3.0",
     "@reduxjs/toolkit": "^2.2.2",
+    "ag-charts-react": "^9.2.1",
     "axios": "^1.6.8",
     "chart.js": "^4.4.2",
     "firebase": "^10.10.0",
