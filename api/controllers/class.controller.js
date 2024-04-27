@@ -59,7 +59,7 @@ export const getClassIdByName = async (req, res, next) => {
     if (!classData) {
       return res.status(404).json({ message: 'Class not found' });
     }
-    res.status(200).json({ classId: classData._id });
+    res.status(200).json(classData);
   } catch (error) {
     next(error);
   }
