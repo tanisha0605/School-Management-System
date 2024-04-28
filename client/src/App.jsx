@@ -9,6 +9,9 @@ import Student from "./pages/Student"
 import Teacher from "./pages/Teacher"
 import Class from "./pages/Class"
 import ClassAnalytics from "./pages/ClassAnalytics"
+import AddStudent from "./pages/AddStudent"
+import AddClass from "./pages/AddClass"
+import AddTeacher from "./pages/AddTeacher"
 
 export default function App() {
   return (
@@ -21,8 +24,11 @@ export default function App() {
       <Route  element={<PrivateRoute/>}>
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/class" element={<Class/>}/>
+          <Route path="/class/add-class" element={<AddClass/>}/>
           <Route path="/teacher" element={<Teacher/>}/>
+          <Route path="/teacher/add-teacher" element={<AddTeacher/>}/>
           <Route path="/student" element={<Student/>}/>
+          <Route path="/student/add-student" element={<AddStudent/>}/>
           <Route path="/class-analytics/:name" element={<ClassAnalytics/>}/>
       </Route>
     </Routes>

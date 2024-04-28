@@ -21,7 +21,8 @@ function Table({ modelName }) {
         method:'DELETE',
       });
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
+      fetchData();
     } catch (error) {
       console.error("Error deleting data:", error);
     }
