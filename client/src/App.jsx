@@ -33,7 +33,7 @@ export default function App() {
           <Route path="/student/add-student" element={<AddStudent/>}/>
           <Route path="/class-analytics/:name" element={<ClassAnalytics/>}/>
           <Route path="/profit-analysis" element={<ProfitAnalysis/>}/>
-          <Route path="/:model/update/:id" element={<UpdateForm/>}/>
+          <Route path="/:model/:model/update/:id" element={<UpdateForm/>}/>
       </Route>
     </Routes>
     </BrowserRouter>
