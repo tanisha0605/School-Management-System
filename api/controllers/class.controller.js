@@ -99,3 +99,12 @@ export const getIdByName = async (req, res, next) => {
     next(error);
   }
 };
+export const getClassesForm = async (req, res, next) => {
+  try {
+    const Classes = await Class.find({}, { _id: 0 ,numMaleStudents:0, numFemaleStudents:0,__v:0,createdAt:0,updatedAt:0,students:0,teacher:0,currentCapacity:0});
+    return res.status(200).json(Classes);
+  } catch (error) {
+    next(error);
+  }
+};
+

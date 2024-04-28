@@ -1,5 +1,5 @@
 import express from 'express';
-import { updateStudent,deleteStudent,getStudent,getStudents,createStudent,getIdByName} from '../controllers/student.controller.js';
+import { updateStudent,deleteStudent,getStudent,getStudents,createStudent,getIdByName,getStudentsForm} from '../controllers/student.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
 const router = express.Router();
 
@@ -10,4 +10,5 @@ router.delete('/delete/:id',verifyToken,deleteStudent);
 router.get('/get',verifyToken,getStudents);
 router.get('/get/:id',verifyToken,getStudent);
 router.get('/getIdByName/:name',verifyToken,getIdByName);
+router.get('/getForm',verifyToken,getStudentsForm);
 export default router;

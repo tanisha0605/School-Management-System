@@ -1,5 +1,5 @@
 import express from 'express';
-import { createTeacher,updateTeacher,deleteTeacher,getTeacher,getTeachers,getIdByName} from '../controllers/teacher.controller.js';
+import { createTeacher,updateTeacher,deleteTeacher,getTeacher,getTeachers,getIdByName,getTeachersForm} from '../controllers/teacher.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
 const router = express.Router();
 
@@ -9,5 +9,5 @@ router.delete('/delete/:id',verifyToken,deleteTeacher);
 router.get('/get',verifyToken,getTeachers);
 router.get('/get/:id',verifyToken,getTeacher);
 router.get('/getIdByName/:name',verifyToken,getIdByName);
-
+router.get('/getForm',verifyToken,getTeachersForm);
 export default router;

@@ -20,8 +20,6 @@ const teacherSchema = new mongoose.Schema({
       required: true,
       unique:true
     },
-    phone: String,
-    address: String
   },
   salary: {
     type: Number,

@@ -101,4 +101,12 @@ export const getIdByName = async (req, res, next) => {
     next(error);
   }
 };
+export const getTeachersForm = async (req, res, next) => {
+  try {
+    const teachers = await Teacher.find({}, { _id: 0,__v:0,createdAt:0,updatedAt:0,role:0});
+    return res.status(200).json(teachers);
+  } catch (error) {
+    next(error);
+  }
+};
 

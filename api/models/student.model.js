@@ -19,9 +19,7 @@ const studentSchema = new mongoose.Schema({
       type: String,
       required: true,
       unique:true
-    },
-    phone: String,
-    address: String
+    }
   },
   feesPaid: {
     type: Number,
