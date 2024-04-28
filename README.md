@@ -2,6 +2,10 @@
 
 A web-based school management application built using the MERN stack (MongoDB, Express.js, React.js, Node.js) with Tailwind CSS for styling. This application allows managing classes, teachers, and students in a school and provides analytics functionalities.
 
+## Video:
+
+https://github.com/tanisha0605/School-Management-System/assets/144723509/48a8f0b8-7525-45e4-b09d-785775cd5dee
+
 ## Features
 
 - **Data Management**: Manages three core models:
@@ -39,7 +43,7 @@ A web-based school management application built using the MERN stack (MongoDB, E
 Install MongoDB locally or use a cloud-based MongoDB service.
 Configure MongoDB connection URI in the .env file.
 
-##Usage
+## Usage
 1.Start the server:
 ```bash
 npm start
