@@ -1,8 +1,10 @@
 import React from 'react'
-
+import DynamicForm from '../components/Form'
 function AddStudent() {
   return (
-    <div>AddStudent</div>
+    <div>
+      <DynamicForm modelName={'Student'}/>
+    </div>
   )
 }
 
