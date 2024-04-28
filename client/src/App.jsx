@@ -12,6 +12,7 @@ import ClassAnalytics from "./pages/ClassAnalytics"
 import AddStudent from "./pages/AddStudent"
 import AddClass from "./pages/AddClass"
 import AddTeacher from "./pages/AddTeacher"
+import ProfitAnalysis from "./pages/ProfitAnalysis"
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/student" element={<Student/>}/>
           <Route path="/student/add-student" element={<AddStudent/>}/>
           <Route path="/class-analytics/:name" element={<ClassAnalytics/>}/>
+          <Route path="/profit-analysis" element={<ProfitAnalysis/>}/>
       </Route>
     </Routes>
     </BrowserRouter>

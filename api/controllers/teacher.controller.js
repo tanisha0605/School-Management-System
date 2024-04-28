@@ -110,3 +110,25 @@ export const getTeachersForm = async (req, res, next) => {
   }
 };
 
+export const getTeacherSalariesSum = async (req, res, next) => {
+  try {
+    const result = await Teacher.aggregate([
+      {
+        $group: {
+          _id: null,
+          sum: { $sum: "$salary" }
+        }
+      }
+    ]);
+
+    if (result.length > 0) {
+      res.status(200).json({ sum: result[0].sum });
+    } else {
+      res.status(200).json({ sum: 0 }); 
+    }
+  } catch (error) {
+    next(error); 
+  }
+};
+
+

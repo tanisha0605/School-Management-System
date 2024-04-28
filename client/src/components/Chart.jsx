@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from "react";
-import { createRoot } from "react-dom/client";
 import { AgChartsReact } from "ag-charts-react";
 
 export const ChartExample = (data) => {
