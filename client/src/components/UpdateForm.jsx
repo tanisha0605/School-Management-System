@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -29,7 +28,10 @@ function UpdateForm({ modelName, id }) {
       const regularFields = [];
 
       Object.entries(data[0]).forEach(([fieldName]) => {
-        regularFields.push([fieldName]);
+        // Skip rendering 'assignedClass' and 'class' fields
+        if (fieldName !== 'assignedClass' && fieldName !== 'class') {
+          regularFields.push([fieldName]);
+        }
       });
 
       setFields(regularFields);
@@ -78,7 +80,6 @@ function UpdateForm({ modelName, id }) {
   const handleChange = (e) => {
     setFormData({ ...existingData, [e.target.id]: e.target.value });
   };
-  
 
   return (
     <>
@@ -97,27 +98,28 @@ function UpdateForm({ modelName, id }) {
           Update {modelName}
         </Typography>
         <form onSubmit={handleSubmit}>
-  {fields.map(([fieldName]) => (
-    <TextField
-      key={fieldName}
-      label={`* ${capitalizeFirstLetter(fieldName)}${fieldName === "dob" ? " (YYYY-MM-DD)" : ""}${fieldName === "gender" ? " (Male/Female)" : ""}`}
-      fullWidth
-      margin="normal"
-      SelectProps={{
-        native: true,
-      }}
-      InputProps={fieldName === "email" ? { inputMode: "email", pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$" } : {}}
-      onChange={handleChange}
-      id={fieldName}
-      value={formData[fieldName] || existingData[fieldName] || ''}
-    />
-  ))}
-
-  <Button type="submit" variant="contained" color="primary">
-    Update
-  </Button>
-</form>
-
+          {fields.map(([fieldName]) => (
+            // Skip rendering 'assignedClass' and 'class' fields
+            fieldName !== 'assignedClass' && fieldName !== 'class' && (
+              <TextField
+                key={fieldName}
+                label={`* ${capitalizeFirstLetter(fieldName)}${fieldName === "dob" ? " (YYYY-MM-DD)" : ""}${fieldName === "gender" ? " (Male/Female)" : ""}`}
+                fullWidth
+                margin="normal"
+                SelectProps={{
+                  native: true,
+                }}
+                InputProps={fieldName === "email" ? { inputMode: "email", pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$" } : {}}
+                onChange={handleChange}
+                id={fieldName}
+                value={formData[fieldName] || existingData[fieldName] || ''}
+              />
+            )
+          ))}
+          <Button type="submit" variant="contained" color="primary">
+            Update
+          </Button>
+        </form>
       </Box>
       {errorMessage && (
         <div className="flex items-center justify-center">
@@ -138,3 +140,4 @@ function UpdateForm({ modelName, id }) {
 }
 
 export default UpdateForm;
+
