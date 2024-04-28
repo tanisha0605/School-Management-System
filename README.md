@@ -1,4 +1,4 @@
-# School Management Application
+# School Management Application📚🎓
 
 A web-based school management application built using the MERN stack (MongoDB, Express.js, React.js, Node.js) with Tailwind CSS for styling. This application allows managing classes, teachers, and students in a school and provides analytics functionalities.
 
