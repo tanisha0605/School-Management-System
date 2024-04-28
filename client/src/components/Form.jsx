@@ -9,137 +9,119 @@ function capitalizeFirstLetter(string) {
 }
 
 function DynamicForm({ modelName }) {
-    const [fields, setFields] = useState([]);
-    const [contactDetailsFields, setContactDetailsFields] = useState([]);
-  
-    useEffect(() => {
-      fetchModelSchema();
-    }, []);
-  
-    const fetchModelSchema = async () => {
-      try {
-        const response = await fetch(`/api/${modelName.toLowerCase()}/getForm`);
-        const data = await response.json();
-        
-        // Extract the first document's schema
-        const modelSchema = data[0];
-    
-        const filteredFields = Object.entries(modelSchema).filter(
-          ([fieldName, fieldConfig]) => !["__v", "_id", "createdAt", "updatedAt","role"].includes(fieldName)
-        );
-    
-        // Separate contactDetails fields
-        const regularFields = [];
-        const contactDetails = [];
-        filteredFields.forEach(([fieldName, fieldConfig]) => {
-          if (fieldName === "contactDetails") {
-            contactDetails.push(...Object.entries(fieldConfig));
-          } else {
-            regularFields.push([fieldName, fieldConfig]);
-          }
-        });
-    
-        setFields(regularFields);
-        setContactDetailsFields(contactDetails);
-      } catch (error) {
-        console.error("Error fetching model schema:", error);
+  const [fields, setFields] = useState([]);
+  const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    fetchModelSchema();
+  }, []);
+
+  const fetchModelSchema = async () => {
+    try {
+      const response = await fetch(`/api/${modelName.toLowerCase()}/getForm`);
+      const data = await response.json();
+
+      // Extract the first document's schema
+      const modelSchema = data[0];
+
+      // Check if the modelSchema object is empty
+      if (!Object.keys(modelSchema).length) {
+        console.error("Model schema is empty");
+        return;
       }
-    };
+
+      const regularFields = [];
+
+      // Extract regular fields
+      Object.entries(modelSchema).forEach(([fieldName]) => {
+          regularFields.push([fieldName]);
+      });
+
+      setFields(regularFields);
+    } catch (error) {
+      console.error("Error fetching model schema:", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
   
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      // Implement form submission logic here
-    };
+      // Make POST request to the API endpoint
+      const response = await fetch(`/api/${modelName.toLowerCase()}/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
   
-    return (
-      <Box
-        sx={{
-          boxShadow: 1,
-          p: 3,
-          borderRadius: 2,
-          width: "400px",
-          margin: "auto",
-          mt: 3,
-          textAlign: "center",
-        }}
-      >
-        <Typography variant="h6" gutterBottom>
-          Add {modelName}
-        </Typography>
-        <form onSubmit={handleSubmit}>
-          {fields.map(([fieldName, fieldConfig]) => (
-            (fieldName === "dob" && fieldConfig.type === "Date") ? (
-              <TextField
-                key={fieldName}
-                label={capitalizeFirstLetter(fieldName)}
-                type="date"
-                required={fieldConfig.required}
-                fullWidth
-                margin="normal"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            ) : (fieldName === "feesPaid") ? (
-              <TextField
-                key={fieldName}
-                label="Fees Paid"
-                type={fieldConfig.type === "Number" ? "number" : "text"}
-                required={fieldConfig.required}
-                fullWidth
-                margin="normal"
-              />
-            ) : (fieldName === "gender" && fieldConfig.enum) ? (
-              <TextField
-                key={fieldName}
-                select
-                label={capitalizeFirstLetter(fieldName)}
-                fullWidth
-                margin="normal"
-                SelectProps={{
-                  native: true,
-                }}
-              >
-                {fieldConfig.enum.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </TextField>
-            ) : (
-              <TextField
-                key={fieldName}
-                label={capitalizeFirstLetter(fieldName)}
-                type={fieldConfig.type === "Number" ? "number" : "text"}
-                required={fieldConfig.required}
-                fullWidth
-                margin="normal"
-              />
-            )
-          ))}
-          {contactDetailsFields.length > 0 && (
-            <>
-              <Typography variant="subtitle1" gutterBottom align="left">
-                Contact Details:
-              </Typography>
-              {contactDetailsFields.map(([contactField, contactFieldConfig]) => (
-                <TextField
-                  key={contactField}
-                  label={capitalizeFirstLetter(contactField)}
-                  type={contactFieldConfig.type === "Number" ? "number" : "text"}
-                  required={contactFieldConfig.required}
-                  fullWidth
-                  margin="normal"
-                />
-              ))}
-            </>
-          )}
-          <Button type="submit" variant="contained" color="primary">
-            Submit
-          </Button>
-        </form>
-      </Box>
-    );
-  }
+      // Handle the response
+      if (response.ok) {
+        console.log(`${modelName} created successfully.`);
+        // Optionally, you can redirect to another page or perform additional actions here
+      } else {
+        const errorMessage = await response.text();
+        throw new Error(`Failed to create ${modelName}: ${errorMessage}`);
+      }
+    } catch (error) {
+      console.error('Error creating', modelName, ':', error.message);
+    }
+  };
   
-  export default DynamicForm;
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+    console.log(formData);
+  };
+  
+  return (
+    <Box
+      sx={{
+        boxShadow: 1,
+        p: 3,
+        borderRadius: 2,
+        width: "400px",
+        margin: "auto",
+        mt: 3,
+        textAlign: "center",
+      }}
+    >
+      <Typography variant="h6" gutterBottom>
+        Add {modelName}
+      </Typography>
+      <form onSubmit={handleSubmit}>
+        {fields.map(([fieldName]) => (
+          <TextField
+            key={fieldName}
+            label={`* ${capitalizeFirstLetter(fieldName)}${fieldName === "dob" ? " (YYYY-MM-DD)" : ""}${fieldName === "gender" ? " (Male/Female)" : ""}`}
+            fullWidth
+            margin="normal"
+            SelectProps={{
+              native: true,
+            }}
+            InputProps={fieldName === "email" ? { inputMode: "email", pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$" } : {}}
+            onChange={handleChange}
+            id={fieldName}
+            value={formData[fieldName] || ''}
+          >
+          </TextField>
+        ))}
+        <Button type="submit" variant="contained" color="primary">
+          Submit
+        </Button>
+      </form>
+    </Box>
+  );
+}
+
+export default DynamicForm;
+
+
+
+
+

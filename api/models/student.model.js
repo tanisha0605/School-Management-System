@@ -14,12 +14,9 @@ const studentSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  contactDetails: {
-    email: {
+  email: {
       type: String,
       required: true,
-      unique:true
-    }
   },
   feesPaid: {
     type: Number,

@@ -14,12 +14,9 @@ const teacherSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  contactDetails: {
-    email: {
-      type: String,
-      required: true,
-      unique:true
-    },
+  email: {
+    type: String,
+    required: true,
   },
   salary: {
     type: Number,

@@ -12,8 +12,8 @@ function Table({ modelName }) {
   }, []);
 
   const selectedFieldsMap = {
-    student: ['name', 'gender', 'dob', 'contactDetails.email', 'feesPaid', 'class.name','_id'],
-    teacher: ['contactDetails.email', 'name', 'gender', 'dob', 'salary', 'assignedClass.name','_id'],
+    student: ['name', 'gender', 'dob', 'email', 'feesPaid', 'class.name','_id'],
+    teacher: ['email', 'name', 'gender', 'dob', 'salary', 'assignedClass.name','_id'],
     class:['name','year','teacher.name','maxCapacity','_id']
   };
   const handleDelete =async(lowerCaseModelName,id)=>{
@@ -123,8 +123,6 @@ function Table({ modelName }) {
         return 'Date of Birth';
       case 'assignedClass.name':
         return 'Assigned Class';
-      case 'contactDetails.email':
-        return 'Email';
       case 'maxCapacity':
         return 'Max Capacity';
       case 'teacher.name' :
