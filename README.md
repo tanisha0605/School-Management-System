@@ -6,6 +6,10 @@ A web-based school management application built using the MERN stack (MongoDB, E
 
 https://github.com/tanisha0605/School-Management-System/assets/144723509/8cac718a-e411-4857-9a33-9db8b9984114
 
+## Technologies Used
+Frontend : React, MaterialUI, AG Charts
+Backend : Node.js , MongoDB , Express.js, Firebase
+
 ## Features
 
 - **Data Management**: Manages three core models:
