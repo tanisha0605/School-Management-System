@@ -4,7 +4,7 @@ A web-based school management application built using the MERN stack (MongoDB, E
 
 ## Video:
 
-https://github.com/tanisha0605/School-Management-System/assets/144723509/4cb5b91d-1f5c-4d69-b3e8-5858ca4cf994
+https://github.com/tanisha0605/School-Management-System/assets/144723509/8cac718a-e411-4857-9a33-9db8b9984114
 
 ## Features
 
