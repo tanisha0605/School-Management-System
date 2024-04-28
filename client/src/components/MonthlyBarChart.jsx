@@ -1,25 +1,29 @@
-import React, { Fragment, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AgChartsReact } from "ag-charts-react";
 
-export const BarChart = (data) => {
-    function getData() {
-        return [
-          {
-            quarter: "Q1'18",
-            SalaryofTeachers: 14,
-            FeesReceived: 16,
-            ProfitEarned: 14,
-          }
-        ];
-      }
+const MonthlyBarChart = ({ sum, fees }) => {
+  let profit = 0; // Initialize profit variable
+
+  // Calculate profit based on fees and sum
+  if (fees >= sum) {
+    profit = fees - sum;
+  } else {
+    profit = sum - fees;
+  }
+  console.log(profit);
   const [options, setOptions] = useState({
     title: {
-      text: "Profit by Month",
+      text: "Profit Analysis",
     },
     subtitle: {
       text: "In Rupees",
     },
-    data: getData(),
+    data: [{
+      quarter: "Total",
+      SalaryofTeachers: sum,
+      FeesReceived: fees,
+      ProfitEarned: profit,
+    }],
     series: [
       {
         type: "bar",
@@ -44,3 +48,9 @@ export const BarChart = (data) => {
 
   return <AgChartsReact options={options} />;
 };
+
+export default MonthlyBarChart;
+
+
+
+

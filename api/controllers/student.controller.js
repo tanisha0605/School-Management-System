@@ -122,3 +122,24 @@ export const getStudentsForm = async (req, res, next) => {
   }
 };
 
+export const getStudentFeesSum = async (req, res, next) => {
+  try {
+    const result = await Student.aggregate([
+      {
+        $group: {
+          _id: null,
+          sum: { $sum: "$feesPaid" }
+        }
+      }
+    ]);
+
+    if (result.length > 0) {
+      res.status(200).json({ sum: result[0].sum });
+    } else {
+      res.status(200).json({ sum: 0 }); 
+    }
+  } catch (error) {
+    next(error); 
+  }
+};
+
