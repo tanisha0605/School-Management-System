@@ -13,7 +13,7 @@ import AddStudent from "./pages/AddStudent"
 import AddClass from "./pages/AddClass"
 import AddTeacher from "./pages/AddTeacher"
 import ProfitAnalysis from "./pages/ProfitAnalysis"
-import UpdateForm from "./pages/UpdateForm"
+import UpdateFormPage from "./pages/UpdateFormPage"
 
 export default function App() {
   return (
@@ -33,7 +33,7 @@ export default function App() {
           <Route path="/student/add-student" element={<AddStudent/>}/>
           <Route path="/class-analytics/:name" element={<ClassAnalytics/>}/>
           <Route path="/profit-analysis" element={<ProfitAnalysis/>}/>
-          <Route path="/:model/:model/update/:id" element={<UpdateForm/>}/>
+          <Route path="/:model/:model/update/:id" element={<UpdateFormPage/>}/>
       </Route>
     </Routes>
     </BrowserRouter>

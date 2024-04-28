@@ -38,8 +38,8 @@ export const deleteClass = async (req, res, next) => {
 
 
 export const updateClass = async (req, res, next) => {
-  const Class= await Class.findById(req.params.id);
-  if (!listing) {
+  const existingclass= await Class.findById(req.params.id);
+  if (!existingclass) {
     return next(errorHandler(404, 'Class not found!'));
   }
   try {
