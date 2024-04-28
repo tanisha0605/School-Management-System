@@ -51,8 +51,8 @@ export const deleteTeacher = async (req, res, next) => {
 };
 
 export const updateTeacher = async (req, res, next) => {
-  const Teacher= await Teacher.findById(req.params.id);
-  if (!listing) {
+  const teacher= await Teacher.findById(req.params.id);
+  if (!teacher) {
     return next(errorHandler(404, 'Teacher not found!'));
   }
   try {
@@ -69,11 +69,11 @@ export const updateTeacher = async (req, res, next) => {
 
 export const getTeacher = async (req, res, next) => {
   try {
-    const Teacher = await Teacher.findById(req.params.id).populate('assignedClass');
-    if (!Teacher) {
+    const teacher = await Teacher.findById(req.params.id).populate('assignedClass');
+    if (!teacher) {
       return next(errorHandler(404, 'Teacher not found!'));
     }
-    res.status(200).json(Teacher);
+    res.status(200).json(teacher);
   } catch (error) {
     next(error);
   }

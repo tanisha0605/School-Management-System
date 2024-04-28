@@ -75,12 +75,9 @@ function UpdateForm({ modelName, id }) {
   };
 
   const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [id]: value,
-    }));
+    setFormData({ ...existingData, [e.target.id]: e.target.value });
   };
+  
 
   return (
     <>
