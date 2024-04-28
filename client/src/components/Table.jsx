@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import DeleteButton from "./DeleteButton";
+import UpdateButton from "./UpdateButton";
 function Table({ modelName }) {
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
@@ -88,15 +89,21 @@ function Table({ modelName }) {
         };
       });
   
-      // Add a new column definition for the delete button
+      // Add a new column definition for the delete and update button
       gridColumns.push({
-        field: 'delete',
+        field: 'actions',
         headerName: 'Actions',
-        width: 150,
+        width: 200,
+        headerAlign: 'center', // Center align the header
         renderCell: (params) => (
-          <DeleteButton onClick={() => handleDelete(lowerCaseModelName,params.row._id)} /> 
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <DeleteButton onClick={() => handleDelete(lowerCaseModelName, params.row._id)} />
+            <UpdateButton />
+          </div>
         ),
       });
+      
+      
       
       const visibleColumns = gridColumns.filter(column => column.field !== '_id');
   
