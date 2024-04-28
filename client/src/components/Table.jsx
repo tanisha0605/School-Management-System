@@ -5,7 +5,7 @@ import DeleteButton from "./DeleteButton";
 import UpdateButton from "./UpdateButton";
 import { useNavigate } from 'react-router-dom';
 import Loading from "./Loading";
-
+import { Button } from "@mui/material";
 function Table({ modelName }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -79,13 +79,31 @@ function Table({ modelName }) {
               </div>
             ),
           };
+        } else {
+          return {
+            field: columnName,
+            headerName: getHeaderTitle(columnName),
+            width: 150,
+          };
         }
-        return {
-          field: columnName,
-          headerName: getHeaderTitle(columnName),
-          width: 150,
-        };
       });
+      
+      // Add a new button only if modelName is 'Class'
+      if (modelName === 'Class') {
+        gridColumns.push({
+          field: 'details', // You can change this to an appropriate field name
+          headerName: 'Details',
+          width: 150,
+          renderCell: (params) => (
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Link to={`/class-analytics/${params.row.name}`}>
+                <Button variant="outlined" color="primary">Details</Button>
+              </Link>
+            </div>
+          ),
+        });
+      }
+      
       gridColumns.push({
         field: 'actions',
         headerName: 'Actions',
