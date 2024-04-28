@@ -11,6 +11,8 @@ function capitalizeFirstLetter(string) {
 function DynamicForm({ modelName }) {
   const [fields, setFields] = useState([]);
   const [formData, setFormData] = useState({});
+  const [errorMessage, setErrorMessage] = useState(null); 
+  const [successMessage, setSuccessMessage] = useState(null); 
 
   useEffect(() => {
     fetchModelSchema();
@@ -36,7 +38,7 @@ function DynamicForm({ modelName }) {
       Object.entries(modelSchema).forEach(([fieldName]) => {
           regularFields.push([fieldName]);
       });
-
+      console.log(regularFields);
       setFields(regularFields);
     } catch (error) {
       console.error("Error fetching model schema:", error);
@@ -46,7 +48,7 @@ function DynamicForm({ modelName }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-  
+        console.log(formData);
       // Make POST request to the API endpoint
       const response = await fetch(`/api/${modelName.toLowerCase()}/create`, {
         method: 'POST',
@@ -58,14 +60,17 @@ function DynamicForm({ modelName }) {
   
       // Handle the response
       if (response.ok) {
-        console.log(`${modelName} created successfully.`);
-        // Optionally, you can redirect to another page or perform additional actions here
+        setSuccessMessage(`${modelName} created successfully.`)
+        setErrorMessage(null)
       } else {
         const errorMessage = await response.text();
-        throw new Error(`Failed to create ${modelName}: ${errorMessage}`);
+        setErrorMessage(`Failed to create ${modelName}`);
+        setSuccessMessage(null) 
       }
     } catch (error) {
       console.error('Error creating', modelName, ':', error.message);
+      setErrorMessage(`Error creating ${modelName}: ${error.message}`);
+      setSuccessMessage(null) ;
     }
   };
   
@@ -76,50 +81,68 @@ function DynamicForm({ modelName }) {
       ...prevData,
       [id]: value,
     }));
-    console.log(formData);
+    //console.log(formData);
   };
   
   return (
-    <Box
-      sx={{
-        boxShadow: 1,
-        p: 3,
-        borderRadius: 2,
-        width: "400px",
-        margin: "auto",
-        mt: 3,
-        textAlign: "center",
-      }}
-    >
-      <Typography variant="h6" gutterBottom>
-        Add {modelName}
-      </Typography>
-      <form onSubmit={handleSubmit}>
-        {fields.map(([fieldName]) => (
-          <TextField
-            key={fieldName}
-            label={`* ${capitalizeFirstLetter(fieldName)}${fieldName === "dob" ? " (YYYY-MM-DD)" : ""}${fieldName === "gender" ? " (Male/Female)" : ""}`}
-            fullWidth
-            margin="normal"
-            SelectProps={{
-              native: true,
-            }}
-            InputProps={fieldName === "email" ? { inputMode: "email", pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$" } : {}}
-            onChange={handleChange}
-            id={fieldName}
-            value={formData[fieldName] || ''}
-          >
-          </TextField>
-        ))}
-        <Button type="submit" variant="contained" color="primary">
-          Submit
-        </Button>
-      </form>
-    </Box>
+    <>
+      <Box
+        sx={{
+          boxShadow: 1,
+          p: 3,
+          borderRadius: 2,
+          width: "400px",
+          margin: "auto",
+          mt: 3,
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="h6" gutterBottom>
+          Add {modelName}
+        </Typography>
+        <form onSubmit={handleSubmit}>
+          {fields.map(([fieldName]) => (
+            <TextField
+              key={fieldName}
+              label={`* ${capitalizeFirstLetter(fieldName)}${fieldName === "dob" ? " (YYYY-MM-DD)" : ""}${fieldName === "gender" ? " (Male/Female)" : ""}`}
+              fullWidth
+              margin="normal"
+              SelectProps={{
+                native: true,
+              }}
+              InputProps={fieldName === "email" ? { inputMode: "email", pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$" } : {}}
+              onChange={handleChange}
+              id={fieldName}
+              value={formData[fieldName] || ''}
+            >
+            </TextField>
+          ))}
+          <Button type="submit" variant="contained" color="primary">
+            Submit
+          </Button>
+        </form>
+      </Box>
+      {errorMessage && (
+        <div className="flex items-center justify-center">
+        <Typography variant="body1" color="error" gutterBottom>
+          {errorMessage}
+        </Typography>
+         </div>
+      )}
+     {successMessage && (
+        <div className="flex items-center justify-center">
+          <Typography variant="body1" color="#8bc34a" gutterBottom>
+            {successMessage}
+          </Typography>
+        </div>
+      )}
+      
+    </>
   );
 }
 
 export default DynamicForm;
+
 
 
 
