@@ -27,7 +27,7 @@ function Table({ modelName }) {
       //console.log(data);
       fetchData();
     } catch (error) {
-      console.error("Error deleting data:", error);
+      //console.error("Error deleting data:", error);
     }
   };
   const handleUpdate= async(lowerCaseModelName,id)=>{
@@ -118,7 +118,7 @@ function Table({ modelName }) {
       setColumns(visibleColumns);
   
     } catch (error) {
-      console.error("Error fetching data:", error);
+      //console.error("Error fetching data:", error);
     }
   };
   

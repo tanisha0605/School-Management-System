@@ -35,7 +35,7 @@ function UpdateForm({ modelName, id }) {
 
       setFields(regularFields);
     } catch (error) {
-      console.error("Error fetching model schema:", error);
+      //console.error("Error fetching model schema:", error);
     }
   };
 
@@ -45,7 +45,7 @@ function UpdateForm({ modelName, id }) {
       const data = await response.json();
       setFormData(data);
     } catch (error) {
-      console.error("Error fetching existing data:", error);
+      //console.error("Error fetching existing data:", error);
     }
   };
 
@@ -69,7 +69,7 @@ function UpdateForm({ modelName, id }) {
         setSuccessMessage(null);
       }
     } catch (error) {
-      console.error('Error updating', modelName, ':', error.message);
+      //console.error('Error updating', modelName, ':', error.message);
       setErrorMessage(`Error updating ${modelName}: ${error.message}`);
       setSuccessMessage(null);
     }

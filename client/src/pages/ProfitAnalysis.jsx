@@ -21,7 +21,7 @@ function ProfitAnalysis() {
             setData(data.sum);
             setData2(data2.sum);
         } catch (error) {
-            console.error("Error fetching data:", error);
+            //console.error("Error fetching data:", error);
         }
     };
 

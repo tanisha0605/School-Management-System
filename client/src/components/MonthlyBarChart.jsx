@@ -10,7 +10,7 @@ const MonthlyBarChart = ({ sum, fees }) => {
   } else {
     profit = sum - fees;
   }
-  console.log(profit);
+  //console.log(profit);
   const [options, setOptions] = useState({
     title: {
       text: "Profit Analysis",

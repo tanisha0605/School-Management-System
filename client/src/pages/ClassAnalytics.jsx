@@ -16,7 +16,7 @@ function ClassAnalytics() {
             const data = await response.json();
             setClassData(data);
         } catch (error) {
-            console.error("Error fetching data:", error);
+            //.error("Error fetching data:", error);
         }
     }
 

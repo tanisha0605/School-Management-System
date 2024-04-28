@@ -28,7 +28,7 @@ function DynamicForm({ modelName }) {
 
       // Check if the modelSchema object is empty
       if (!Object.keys(modelSchema).length) {
-        console.error("Model schema is empty");
+        // console.error("Model schema is empty");
         return;
       }
 
@@ -38,17 +38,17 @@ function DynamicForm({ modelName }) {
       Object.entries(modelSchema).forEach(([fieldName]) => {
           regularFields.push([fieldName]);
       });
-      console.log(regularFields);
+      //console.log(regularFields);
       setFields(regularFields);
     } catch (error) {
-      console.error("Error fetching model schema:", error);
+      //console.error("Error fetching model schema:", error);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        console.log(formData);
+        //console.log(formData);
       // Make POST request to the API endpoint
       const response = await fetch(`/api/${modelName.toLowerCase()}/create`, {
         method: 'POST',
@@ -68,7 +68,7 @@ function DynamicForm({ modelName }) {
         setSuccessMessage(null) 
       }
     } catch (error) {
-      console.error('Error creating', modelName, ':', error.message);
+      //console.error('Error creating', modelName, ':', error.message);
       setErrorMessage(`Error creating ${modelName}: ${error.message}`);
       setSuccessMessage(null) ;
     }
