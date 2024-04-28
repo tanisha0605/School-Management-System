@@ -3,16 +3,18 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Loading from "./Loading"; 
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function DynamicForm({ modelName }) {
+  const [loading, setLoading] = useState(true); 
   const [fields, setFields] = useState([]);
   const [formData, setFormData] = useState({});
-  const [errorMessage, setErrorMessage] = useState(null); 
-  const [successMessage, setSuccessMessage] = useState(null); 
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   useEffect(() => {
     fetchModelSchema();
@@ -23,33 +25,28 @@ function DynamicForm({ modelName }) {
       const response = await fetch(`/api/${modelName.toLowerCase()}/getForm`);
       const data = await response.json();
 
-      // Extract the first document's schema
       const modelSchema = data[0];
 
-      // Check if the modelSchema object is empty
       if (!Object.keys(modelSchema).length) {
-        // console.error("Model schema is empty");
         return;
       }
 
       const regularFields = [];
 
-      // Extract regular fields
       Object.entries(modelSchema).forEach(([fieldName]) => {
-          regularFields.push([fieldName]);
+        regularFields.push([fieldName]);
       });
-      //console.log(regularFields);
+
       setFields(regularFields);
+      setLoading(false);
     } catch (error) {
-      //console.error("Error fetching model schema:", error);
+      setErrorMessage(`Error fetching model schema: ${error.message}`);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        //console.log(formData);
-      // Make POST request to the API endpoint
       const response = await fetch(`/api/${modelName.toLowerCase()}/create`, {
         method: 'POST',
         headers: {
@@ -58,22 +55,19 @@ function DynamicForm({ modelName }) {
         body: JSON.stringify(formData),
       });
   
-      // Handle the response
       if (response.ok) {
-        setSuccessMessage(`${modelName} created successfully.`)
-        setErrorMessage(null)
+        setSuccessMessage(`${modelName} created successfully.`);
+        setErrorMessage(null);
       } else {
         const errorMessage = await response.text();
         setErrorMessage(`Failed to create ${modelName}`);
-        setSuccessMessage(null) 
+        setSuccessMessage(null);
       }
     } catch (error) {
-      //console.error('Error creating', modelName, ':', error.message);
       setErrorMessage(`Error creating ${modelName}: ${error.message}`);
-      setSuccessMessage(null) ;
+      setSuccessMessage(null);
     }
   };
-  
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -81,9 +75,12 @@ function DynamicForm({ modelName }) {
       ...prevData,
       [id]: value,
     }));
-    //console.log(formData);
   };
   
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <>
       <Box
@@ -136,12 +133,12 @@ function DynamicForm({ modelName }) {
           </Typography>
         </div>
       )}
-      
     </>
   );
 }
 
 export default DynamicForm;
+
 
 
 

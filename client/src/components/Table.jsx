@@ -4,8 +4,11 @@ import { Link } from "react-router-dom";
 import DeleteButton from "./DeleteButton";
 import UpdateButton from "./UpdateButton";
 import { useNavigate } from 'react-router-dom';
+import Loading from "./Loading";
+
 function Table({ modelName }) {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
 
@@ -24,27 +27,19 @@ function Table({ modelName }) {
         method:'DELETE',
       });
       const data = await response.json();
-      //console.log(data);
       fetchData();
     } catch (error) {
-      //console.error("Error deleting data:", error);
+      // Handle error
     }
   };
   const handleUpdate= async(lowerCaseModelName,id)=>{
-    // console.log(lowerCaseModelName);
-    // console.log(id);
     navigate(`${lowerCaseModelName}/update/${id}`);
   }
   const fetchData = async () => {
     try {
-      // Convert modelName to lowercase
       const lowerCaseModelName = modelName.toLowerCase();
-  
-      // Make the API call to fetch data for the modelName
       const response = await fetch(`/api/${lowerCaseModelName}/get`); 
       const data = await response.json();
-      
-      // Extracting only the required fields from the data
       const rowsWithSelectedFields = data.map((row, index) => {
         const selectedFields = selectedFieldsMap[lowerCaseModelName];
         const selectedValues = selectedFields.reduce((acc, key) => {
@@ -53,29 +48,25 @@ function Table({ modelName }) {
           for (let i = 0; i < keys.length; i++) {
             value = value[keys[i]];
             if (value === undefined || value === null) {
-              value = ''; // Assign empty string if value is undefined or null
+              value = '';
               break;
             }
           }
           if (value !== undefined) {
             if (key === 'dob') {
-              value = value.slice(0, 10); // Extract YYYY-MM-DD part
+              value = value.slice(0, 10);
             }
             acc[key] = value;
           }
           return acc;
         }, {});
         return {
-          id: index + 1, // Generate a unique ID for each row
+          id: index + 1,
           ...selectedValues
         };
       });
-  
-      // Extract column names from the first row of data
       const firstRow = rowsWithSelectedFields[0];
       const columnNames = Object.keys(firstRow);
-  
-      // Create column definition for DataGrid
       const gridColumns = columnNames.map((columnName) => {
         if (modelName === 'Class' && columnName === 'name') {
           return {
@@ -91,17 +82,15 @@ function Table({ modelName }) {
         }
         return {
           field: columnName,
-          headerName: getHeaderTitle(columnName), // Get customized header title
+          headerName: getHeaderTitle(columnName),
           width: 150,
         };
       });
-     
-      // Add a new column definition for the delete and update button
       gridColumns.push({
         field: 'actions',
         headerName: 'Actions',
         width: 200,
-        headerAlign: 'center', // Center align the header
+        headerAlign: 'center',
         renderCell: (params) => (
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <DeleteButton onClick={() => handleDelete(lowerCaseModelName, params.row._id)} />
@@ -109,21 +98,17 @@ function Table({ modelName }) {
           </div>
         ),
       });
-      
-      
-      
       const visibleColumns = gridColumns.filter(column => column.field !== '_id');
   
       setRows(rowsWithSelectedFields);
       setColumns(visibleColumns);
+      setLoading(false); 
   
     } catch (error) {
-      //console.error("Error fetching data:", error);
+      // Handle error
     }
   };
   
-
-  // Function to get customized header title
   const getHeaderTitle = (columnName) => {
     switch (columnName) {
       case 'dob':
@@ -147,28 +132,35 @@ function Table({ modelName }) {
 
   return (
     <div style={{ height: 500, width: "100%" }}>
-      <DataGrid
-        sx={{
-          m: 7,
-          boxShadow: 1,
-          fontSize: 14,
-          columnGap:10,
-          rowGap: 3,
-        }}
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { pageSize: 5, page: 0 },
-          },
-        }}
-        pageSizeOptions={[5,10,25]}
-      />
+      {loading ? ( 
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+          <Loading/>
+        </div>
+      ) : ( 
+        <DataGrid
+          sx={{
+            m: 7,
+            boxShadow: 1,
+            fontSize: 14,
+            columnGap:10,
+            rowGap: 3,
+          }}
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 5, page: 0 },
+            },
+          }}
+          pageSizeOptions={[5,10,25]}
+        />
+      )}
     </div>
   );
 }
 
 export default Table;
+
 
 
 

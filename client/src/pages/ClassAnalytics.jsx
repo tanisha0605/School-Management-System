@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ChartExample } from "../components/Chart";
-
+import Loading from "../components/Loading";
 function ClassAnalytics() {
     const { name } = useParams();
     const [classData, setClassData] = useState(null);
@@ -21,7 +21,9 @@ function ClassAnalytics() {
     }
 
     if (!classData) {
-        return <div>Loading...</div>;
+        return <div>
+            <Loading/>
+        </div>
     }
 
     return (
