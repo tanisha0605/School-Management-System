@@ -3,24 +3,25 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Loading from "./Loading"; // Import the Loading component
+import Loading from "./Loading";
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function UpdateForm({ modelName, id }) {
-  const [loading, setLoading] = useState(true); // Add loading state
   const [fields, setFields] = useState([]);
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchData();
+    fetchModelSchema();
+    fetchExistingData();
   }, []);
 
-  const fetchData = async () => {
+  const fetchModelSchema = async () => {
     try {
       const response = await fetch(`/api/${modelName.toLowerCase()}/getForm`);
       const data = await response.json();
@@ -28,6 +29,7 @@ function UpdateForm({ modelName, id }) {
       const regularFields = [];
 
       Object.entries(data[0]).forEach(([fieldName]) => {
+        // Skip rendering 'assignedClass' and 'class' fields
         if (fieldName !== 'assignedClass' && fieldName !== 'class') {
           regularFields.push([fieldName]);
         }
@@ -36,7 +38,7 @@ function UpdateForm({ modelName, id }) {
       setFields(regularFields);
       setLoading(false); 
     } catch (error) {
-      // Handle error
+      console.error("Error fetching model schema:", error);
     }
   };
 
@@ -46,7 +48,7 @@ function UpdateForm({ modelName, id }) {
       const data = await response.json();
       setFormData(data);
     } catch (error) {
-      // Handle error
+      console.error("Error fetching existing data:", error);
     }
   };
 
@@ -70,7 +72,9 @@ function UpdateForm({ modelName, id }) {
         setSuccessMessage(null);
       }
     } catch (error) {
-      // Handle error
+      console.error('Error updating', modelName, ':', error.message);
+      setErrorMessage(`Error updating ${modelName}: ${error.message}`);
+      setSuccessMessage(null);
     }
   };
 
@@ -81,11 +85,9 @@ function UpdateForm({ modelName, id }) {
       [id]: value,
     }));
   };
-
   if (loading) {
     return <Loading />; // Display loading component while fetching data
   }
-
   return (
     <>
       <Box
@@ -104,6 +106,7 @@ function UpdateForm({ modelName, id }) {
         </Typography>
         <form onSubmit={handleSubmit}>
           {fields.map(([fieldName]) => (
+            // Skip rendering 'assignedClass' and 'class' fields
             fieldName !== 'assignedClass' && fieldName !== 'class' && (
               <TextField
                 key={fieldName}
@@ -144,6 +147,7 @@ function UpdateForm({ modelName, id }) {
 }
 
 export default UpdateForm;
+
 
 
 
