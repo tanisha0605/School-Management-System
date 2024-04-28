@@ -1,10 +1,10 @@
 import React from 'react'
 import { Button } from '@mui/material'
 
-function UpdateButton() {
+function UpdateButton({onClick}) {
   return (
     <div>
-        <Button variant="contained">Update</Button>
+        <Button variant="contained" onClick={onClick}>Update</Button>
     </div>
   )
 }

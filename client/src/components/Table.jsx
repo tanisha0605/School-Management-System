@@ -3,7 +3,9 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import DeleteButton from "./DeleteButton";
 import UpdateButton from "./UpdateButton";
+import { useNavigate } from 'react-router-dom';
 function Table({ modelName }) {
+  const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [columns, setColumns] = useState([]);
 
@@ -27,6 +29,11 @@ function Table({ modelName }) {
     } catch (error) {
       console.error("Error deleting data:", error);
     }
+  };
+  const handleUpdate= async(lowerCaseModelName,id)=>{
+    // console.log(lowerCaseModelName);
+    // console.log(id);
+    navigate(`${lowerCaseModelName}/update/${id}`);
   }
   const fetchData = async () => {
     try {
@@ -88,7 +95,7 @@ function Table({ modelName }) {
           width: 150,
         };
       });
-  
+     
       // Add a new column definition for the delete and update button
       gridColumns.push({
         field: 'actions',
@@ -98,7 +105,7 @@ function Table({ modelName }) {
         renderCell: (params) => (
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <DeleteButton onClick={() => handleDelete(lowerCaseModelName, params.row._id)} />
-            <UpdateButton />
+            <UpdateButton onClick={()=> handleUpdate(lowerCaseModelName, params.row._id)}/>
           </div>
         ),
       });
