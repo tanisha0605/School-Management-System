@@ -13,7 +13,6 @@ function UpdateForm({ modelName, id }) {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const [existingData, setExistingData] = useState({});
 
   useEffect(() => {
     fetchModelSchema();
@@ -44,7 +43,6 @@ function UpdateForm({ modelName, id }) {
     try {
       const response = await fetch(`/api/${modelName.toLowerCase()}/get/${id}`);
       const data = await response.json();
-      setExistingData(data);
       setFormData(data);
     } catch (error) {
       console.error("Error fetching existing data:", error);
@@ -78,7 +76,11 @@ function UpdateForm({ modelName, id }) {
   };
 
   const handleChange = (e) => {
-    setFormData({ ...existingData, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [id]: value,
+    }));
   };
 
   return (
@@ -112,7 +114,7 @@ function UpdateForm({ modelName, id }) {
                 InputProps={fieldName === "email" ? { inputMode: "email", pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$" } : {}}
                 onChange={handleChange}
                 id={fieldName}
-                value={formData[fieldName] || existingData[fieldName] || ''}
+                value={formData[fieldName] || ''}
               />
             )
           ))}
@@ -140,4 +142,6 @@ function UpdateForm({ modelName, id }) {
 }
 
 export default UpdateForm;
+
+
 
